@@ -11,17 +11,17 @@ import {
 import Navbar, {Brand} from 'react-bootstrap/lib/Navbar';
 import history from '../../core/history';
 import $ from "jquery";
+
 import SidebarAdmin from '../SidebarAdmin';
 import SidebarUcenik from '../SidebarUcenik';
 import SidebarUcitelj from '../SidebarUcitelj';
-import LoggedUser from '../../globals';
+
 
 const logo = require('./logo.png');
 
-function Header() {
-  const userType = LoggedUser.GetUserType(); // Moguce vrijednosti su UCENIK, UCITELJ, ADMIN
-  console.log("Header user type", userType);
-  let sb = '';
+function Homepage() {
+  const userType = 'KORISNIK'; // Moguce vrijednosti su UCENIK, UCITELJ, ADMIN
+  let sb = null;
     if (userType == 'ADMIN') {
       sb = <SidebarAdmin />;
     } 
@@ -29,8 +29,12 @@ function Header() {
       sb = <SidebarUcenik />;
     }
     else if (userType == 'UCITELJ') {
-      sb = <SidebarUcitelj />;
-    }
+    sb = <SidebarUcitelj />;}
+    else if (userType == 'KORISNIK')
+      {
+        sb = <Homepage />;
+      }
+    
 
   return (
     <div id="wrapper" className="content">
@@ -80,4 +84,4 @@ function toggleMenu(){
     }
   }
 
-export default Header;
+export default Homepage;

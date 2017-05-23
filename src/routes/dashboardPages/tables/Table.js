@@ -7,7 +7,7 @@ import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Well from 'react-bootstrap/lib/Well';
 
 
-const title = 'Table';
+const title = 'svikursevi';
 
 function displayTable(props, context) {
   context.setTitle(title);

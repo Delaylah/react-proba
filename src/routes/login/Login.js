@@ -12,27 +12,49 @@ import React, { PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
 import { FormControl, Checkbox } from 'react-bootstrap';
+import Alert from 'react-bootstrap/lib/Alert';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Login.css';
 import history from '../../core/history';
+import LoggedUser from '../../globals';
+import axios from 'axios';
 
 const title = 'Log In';
 
 
 function submitHandler(e) {
   e.preventDefault();
-  history.push('/');
+  //history.push('/');
+
+  var username = document.getElementById("iName").value;
+  var password = document.getElementById("iPassword").value;
+
+  axios.post('http://localhost:50910/api/login', {
+    username: username,
+    password: password
+  })
+  .then(function (response) {
+    console.log("Login response", response.data.isSuccess);
+    LoggedUser.SetLoggedIn(true, response.data.userType)
+    history.push('/');    
+  })
+  .catch(function (error) {
+    console.error("Login error", error);
+    alert("Došlo je do greške prilikom logovanja.");         
+  });
 }
 
 function Login(props, context) {
   context.setTitle(title);
-  return (
-    <div className="col-md-4 col-md-offset-4">
-      <div className="text-center">
-        <h1 className="login-brand-text">SB Admin React</h1>
-        <h3 className="text-muted">Created by <a href="http://startreact.com">StartReact.com</a> team</h3>
-      </div>
 
+  return (
+
+
+
+
+
+    <div className="col-md-4 col-md-offset-4">
+    
       <Panel header={<h3>Please Sign In</h3>} className="login-panel">
 
         <form role="form" onSubmit={(e) => { submitHandler(e); }}>
@@ -43,6 +65,7 @@ function Login(props, context) {
                 className="form-control"
                 placeholder="Username"
                 name="name"
+                id="iName"
               />
             </div>
 
@@ -52,12 +75,27 @@ function Login(props, context) {
                 placeholder="Password"
                 type="password"
                 name="password"
+                id="iPassword"
               />
-            </div>
-            <Checkbox label="Remember Me" > Remember Me </Checkbox>
+            </div>            
             <Button type="submit" bsSize="large" bsStyle="success" block>Login</Button>
+            
+
+          
           </fieldset>
         </form>
+
+        <div>
+         <a
+                  href=""
+                  onClick = {(event) => { history.push('/register');}}
+                  className="alert-link"
+                 >
+
+                 Nemate korisnicki racun? REGISTRUJ SE OVDJE!!!
+                 </a> 
+        
+        </div>
 
       </Panel>
 
