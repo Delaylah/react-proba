@@ -17,8 +17,35 @@ import {
 import FormControlFeedback from 'react-bootstrap/lib/FormControlFeedback';
 import FormControlStatic from 'react-bootstrap/lib/FormControlStatic';
 import InputGroupAddon from 'react-bootstrap/lib/InputGroupAddon';
+import axios from 'axios';
 
-const title = 'DodavanjeTerminaForma';
+const title = 'DodavanjeLekcijeForma';
+
+
+
+
+function submitHandler(e) {
+  e.preventDefault();
+  //history.push('/');
+
+  var naziv = document.getElementById("inaziv").value;
+  var stepen = document.getElementById("istepen").value;
+  var  opis =document.getElementById('iopis').value;
+    axios.post('http://localhost:8080/objaviTermin', {
+    nazivKursa: naziv,
+    stepenKursa: stepen,
+    opisPredavanja: opis
+
+  })
+  .then(function (response) {
+    console.log("Register response", response.data.isSuccess);
+    alert("Uspješno ste dodali termin.");   
+  })
+  .catch(function (error) {
+    console.error("Register error", error);
+    alert("Došlo je do greške prilikom registrovanja.");         
+  });
+  }
 
 
 function displayForms(props, context) {
@@ -27,45 +54,55 @@ function displayForms(props, context) {
     <div>
       <div className="row">
         <div className="col-lg-12">
-          <PageHeader>Dodaj učitelja</PageHeader>
+          <PageHeader>dodaj termin predavanja</PageHeader>
         </div>
       </div>
 
       <div className="row">
         <div className="col-lg-12">
-          <Panel header={<span>Unesite novog ucitelja</span>} >
+          <Panel header={<span>unesi</span>} >
             <div className="row">
               <div className="col-lg-6">
-                <Form>
+
+
+                <Form role="form" onSubmit={(e) => { submitHandler(e); }}>
                   
                  
-                  <FormGroup controlId="formBasicText2">
-                    <ControlLabel>Naziv lekcije</ControlLabel>
-                    <FormControl
-                      type="text"
-                      placeholder="Enter Text"
-                    />
-                    <HelpBlock></HelpBlock>
-                     
-                    <FormControlFeedback />
-                  </FormGroup>
+                   <fieldset>
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Naziv"
+                name="naziv"
+                id="inaziv"
+              />
+            </div>
 
-                
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Stepen kursa"
+                name="stepen"
+                id="istepen"
+              />
+            </div>
 
-                  <FormGroup
-                    controlId="formBasicFile"
-                  >
-                    <ControlLabel>Uploaduj lekciju</ControlLabel>
-                    <FormControl
-                      type="file"
-                    />
-                    <FormControlFeedback />
-                  </FormGroup>                           
-                  <FormGroup>
-                    <Button type="submit">Dodaj lekciju</Button>
-                    {'  '}
-                    <Button type="reset">Resetuj: </Button>
-                  </FormGroup>
+
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="opis termina "
+                name="opis"
+                id="iopis"
+              />
+            </div>
+
+            <Button type="submit" bsSize="large" bsStyle="success" block>Register</Button>
+
+            </fieldset>
                 </Form>
               </div>  
               </div>           

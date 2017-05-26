@@ -12,6 +12,8 @@ function LoggedUserClass() {
         _isLoggedIn = isLoggedIn;
         _userType = userType;
     }
+
+    
 }
 
 var LoggedUser = new LoggedUserClass();

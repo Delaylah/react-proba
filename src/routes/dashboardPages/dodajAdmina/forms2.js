@@ -1,24 +1,26 @@
-/**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 import React, { PropTypes } from 'react';
-// import { Panel, Input, Button } from 'react-bootstrap';
-import Button from 'react-bootstrap/lib/Button';
-import Panel from 'react-bootstrap/lib/Panel';
-import { FormControl, Checkbox } from 'react-bootstrap';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Register.css';
-import history from '../../core/history';
+import {
+  Panel,
+  Button,
+  Col,
+  PageHeader,
+  ControlLabel,
+  FormControl,
+  HelpBlock,
+  FormGroup,
+  Checkbox,
+  Form,
+  Radio,
+  InputGroup,
+  Glyphicon } from 'react-bootstrap';
+
+import FormControlFeedback from 'react-bootstrap/lib/FormControlFeedback';
+import FormControlStatic from 'react-bootstrap/lib/FormControlStatic';
+import InputGroupAddon from 'react-bootstrap/lib/InputGroupAddon';
 import axios from 'axios';
 
 
-const title = 'Register';
+const title = 'DodajAdmina';
 
 
 function submitHandler(e) {
@@ -33,7 +35,7 @@ function submitHandler(e) {
   if (pass != passConfirm) {
     alert("Šifra za potvrdu mora biti jednaka orginalnoj šifri.");
   } else {
-    axios.post('http://localhost:8080/studenti', {
+    axios.post('http://localhost:8080/administratori', {
     korisnickoIme: username,
     sifra: pass,
     email: email,
@@ -42,8 +44,8 @@ function submitHandler(e) {
     ime: document.getElementById("iIme").value,
     jmbg: document.getElementById("iJmbg").value,
     mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
-    prezime: document.getElementById("iPrezime").value
-
+    prezime: document.getElementById("iPrezime").value,
+    
   })
   .then(function (response) {
     console.log("Register response", response.data.isSuccess);
@@ -56,20 +58,23 @@ function submitHandler(e) {
   }
 }
 
-function Register(props, context) {
+function displayForms(props, context) {
   context.setTitle(title);
   return (
+    <div>
+      <div className="row">
+        <div className="col-lg-12">
+          <PageHeader>Dodaj administratora</PageHeader>
+        </div>
+      </div>
 
-
-
-
-
-    <div className="col-md-4 col-md-offset-4">
-    
-      <Panel header={<h3>Please Sign In</h3>} className="login-panel">
-
-        <form role="form" onSubmit={(e) => { submitHandler(e); }}>
-          <fieldset>
+      <div className="row">
+        <div className="col-lg-12">
+          <Panel header={<span>Unesite novog admina</span>} >
+            <div className="row">
+              <div className="col-lg-6">
+                <Form role="form" onSubmit={(e) => { submitHandler(e); }}>
+                 <fieldset>
             <div className="form-group">
               <FormControl
                 type="text"
@@ -172,23 +177,23 @@ function Register(props, context) {
             </div>
 
 
+<Button type="submit" bsSize="large" bsStyle="success" block>registruj novog admina</Button>
 
-            <Button type="submit" bsSize="large" bsStyle="success" block>Register</Button>
 
+        
           </fieldset>
-        </form>
 
-      </Panel>
 
-      <Button type="submit" bsStyle="info" block
-      onClick = {(event) => { history.push('/naslovna');}}>Nazad na početnu</Button>
-
+                </Form>
+              </div>  
+              </div>           
+          </Panel>
+        </div>
+      </div>
     </div>
-
   );
 }
 
+displayForms.contextTypes = { setTitle: PropTypes.func.isRequired };
 
-Register.contextTypes = { setTitle: PropTypes.func.isRequired };
-
-export default withStyles(s)(Register);
+export default displayForms;

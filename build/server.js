@@ -1470,9 +1470,21 @@ module.exports =
   
   var _forms4 = _interopRequireDefault(_forms3);
   
-  var _svikorisnici = __webpack_require__(184);
+  var _dodajAdmina = __webpack_require__(233);
   
-  var _svikorisnici2 = _interopRequireDefault(_svikorisnici);
+  var _dodajAdmina2 = _interopRequireDefault(_dodajAdmina);
+  
+  var _svikorisnicipredavaci = __webpack_require__(229);
+  
+  var _svikorisnicipredavaci2 = _interopRequireDefault(_svikorisnicipredavaci);
+  
+  var _svikorisnicistudenti = __webpack_require__(231);
+  
+  var _svikorisnicistudenti2 = _interopRequireDefault(_svikorisnicistudenti);
+  
+  var _svikorisniciadmini = __webpack_require__(235);
+  
+  var _svikorisniciadmini2 = _interopRequireDefault(_svikorisniciadmini);
   
   var _dashboardUcitelj = __webpack_require__(186);
   
@@ -1551,17 +1563,6 @@ module.exports =
   var _Header2 = _interopRequireDefault(_Header);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  // Child routes
-  
-  /**
-   * React Starter Kit (https://www.reactstarterkit.com/)
-   *
-   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE.txt file in the root directory of this source tree.
-   */
   
   exports.default = [{
     path: '/naslovna',
@@ -1696,7 +1697,7 @@ module.exports =
     path: '/',
   
     // keep in mind, routes are evaluated in order
-    children: [_home2.default, _notification2.default, _kursStranica2.default, _svikorisnici2.default,
+    children: [_home2.default, _notification2.default, _dodajAdmina2.default, _kursStranica2.default, _svikorisnicipredavaci2.default, _svikorisnicistudenti2.default, _svikorisniciadmini2.default,
     // contact,
     _tables2.default, _mojiKursevi2.default, _zavrseniKursevi2.default, _sviKursevi2.default, _buttons2.default, _flotCharts2.default, _forms2.default, _forms4.default, _grid2.default,
   
@@ -1810,6 +1811,17 @@ module.exports =
       }))();
     }
   }];
+  
+  // Child routes
+  
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
 
 /***/ }),
 /* 39 */
@@ -2060,20 +2072,24 @@ module.exports =
   
   var _globals2 = _interopRequireDefault(_globals);
   
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var logo = __webpack_require__(61);
   
   function Header() {
-    var userType = _globals2.default.GetUserType(); // Moguce vrijednosti su UCENIK, UCITELJ, ADMIN
+    var userType = 'administratori'; // LoggedUser.GetUserType() radi fenomealno ali samo za u radimo ovdje axios get user type da se poredi u cosnole logu
     console.log("Header user type", userType);
-    var sb = '';
-    if (userType == 'ADMIN') {
+    var sb = 'predavaci';
+    if (userType == 'administratori') {
       sb = _react2.default.createElement(_SidebarAdmin2.default, null);
-    } else if (userType == 'UCENIK') {
-      sb = _react2.default.createElement(_SidebarUcenik2.default, null);
-    } else if (userType == 'UCITELJ') {
+    } else if (userType == 'predavaci') {
       sb = _react2.default.createElement(_SidebarUcitelj2.default, null);
+    } else {
+      sb = _react2.default.createElement(_SidebarUcenik2.default, null);
     }
   
     return _react2.default.createElement(
@@ -2354,10 +2370,46 @@ module.exports =
                 _react2.default.createElement(
                   'a',
                   { href: '', onClick: function onClick(e) {
-                      e.preventDefault();_history2.default.push('/svikorisnici');
+                      e.preventDefault();_history2.default.push('/svikorisnicistudenti');
                     } },
                   _react2.default.createElement('i', { className: 'fa fa-dashboard fa-fw' }),
-                  ' \xA0Svi korisnici'
+                  ' \xA0Svi studenti'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  'a',
+                  { href: '', onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/svikorisnicipredavaci');
+                    } },
+                  _react2.default.createElement('i', { className: 'fa fa-dashboard fa-fw' }),
+                  ' \xA0Svi profesori'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  'a',
+                  { href: '', onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/svikorisniciadmini');
+                    } },
+                  _react2.default.createElement('i', { className: 'fa fa-dashboard fa-fw' }),
+                  ' \xA0Svi administratori'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  'a',
+                  { href: '', onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/dodajadmina');
+                    } },
+                  _react2.default.createElement('i', { className: 'fa fa-dashboard fa-fw' }),
+                  ' \xA0DodajAdmina'
                 )
               )
             )
@@ -2605,8 +2657,6 @@ module.exports =
     (0, _createClass3.default)(SidebarUcitelj, [{
       key: 'render',
       value: function render() {
-        var _this2 = this;
-  
         return _react2.default.createElement(
           'div',
           { className: 'navbar-default sidebar', style: { marginLeft: '-20px' }, role: 'navigation' },
@@ -2625,87 +2675,60 @@ module.exports =
                       e.preventDefault();_history2.default.push('/notification');
                     } },
                   _react2.default.createElement('i', { className: 'fa fa-dashboard fa-fw' }),
-                  ' \xA0Dashboard'
+                  ' \xA0Novosti'
                 )
               ),
               _react2.default.createElement(
                 'li',
-                { className: (0, _classnames2.default)({ active: !this.state.chartsElementsCollapsed }) },
+                null,
+                _react2.default.createElement(
+                  'a',
+                  { href: '', onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/dashboarducitelj');
+                    } },
+                  'Moje lekcije, termini i testovi'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
                 _react2.default.createElement(
                   'a',
                   {
                     href: '',
                     onClick: function onClick(e) {
-                      e.preventDefault();
-                      _this2.setState({ chartsElementsCollapsed: !_this2.state.chartsElementsCollapsed });
-                      return false;
+                      e.preventDefault();_history2.default.push('/dodavanjeterminaforma');
                     }
                   },
-                  _react2.default.createElement('i', { className: 'fa fa-bar-chart-o fa-fw' }),
-                  ' \xA0Kursevi',
-                  _react2.default.createElement('span', { className: 'fa arrow' })
-                ),
+                  ' Dodaj termin predavanja kursa'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
                 _react2.default.createElement(
-                  'ul',
+                  'a',
                   {
-                    className: (0, _classnames2.default)({
-                      'nav nav-second-level': true,
-                      collapse: this.state.chartsElementsCollapsed
-                    })
+                    href: '',
+                    onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/dodavanjetestaforma');
+                    }
                   },
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      'a',
-                      { href: '', onClick: function onClick(e) {
-                          e.preventDefault();_history2.default.push('/dashboarducitelja');
-                        } },
-                      'Moje lekcije, termini i testovi'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      'a',
-                      {
-                        href: '',
-                        onClick: function onClick(e) {
-                          e.preventDefault();_history2.default.push('/dodavanjeterminaforma');
-                        }
-                      },
-                      ' Dodaj termin'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      'a',
-                      {
-                        href: '',
-                        onClick: function onClick(e) {
-                          e.preventDefault();_history2.default.push('/dodavanjetestaforma');
-                        }
-                      },
-                      ' Dodaj test'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      'a',
-                      {
-                        href: '',
-                        onClick: function onClick(e) {
-                          e.preventDefault();_history2.default.push('/dodavanjelekcijeforma');
-                        }
-                      },
-                      ' Dodaj novu lekciju'
-                    )
-                  )
+                  ' Dodaj test za kurs'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  'a',
+                  {
+                    href: '',
+                    onClick: function onClick(e) {
+                      e.preventDefault();_history2.default.push('/dodavanjelekcijeforma');
+                    }
+                  },
+                  ' Dodaj novu lekciju za kurs'
                 )
               )
             )
@@ -20270,7 +20293,7 @@ module.exports =
     var username = document.getElementById("iName").value;
     var password = document.getElementById("iPassword").value;
   
-    _axios2.default.post('http://localhost:50910/api/login', {
+    _axios2.default.post('http://localhost:8080/logIn', {
       username: username,
       password: password
     }).then(function (response) {
@@ -20538,7 +20561,7 @@ module.exports =
     if (pass != passConfirm) {
       alert("Šifra za potvrdu mora biti jednaka orginalnoj šifri.");
     } else {
-      _axios2.default.post('http://localhost:50910/api/registration', {
+      _axios2.default.post('http://localhost:8080/studenti', {
         korisnickoIme: username,
         sifra: pass,
         email: email,
@@ -20851,1324 +20874,7 @@ module.exports =
         _react2.default.createElement(
           _PageHeader2.default,
           null,
-          'Tables'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-12' },
-        _react2.default.createElement(
-          _Panel2.default,
-          { header: _react2.default.createElement(
-              'span',
-              null,
-              'DataTables Advanced Tables'
-            ) },
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'div',
-              { className: 'dataTable_wrapper' },
-              _react2.default.createElement(
-                'div',
-                {
-                  id: 'dataTables-example_wrapper',
-                  className: 'dataTables_wrapper form-inline dt-bootstrap no-footer'
-                },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'row' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'col-sm-9' },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'dataTables_length', id: 'dataTables-example_length' },
-                      _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'show' },
-                        ' Show',
-                        _react2.default.createElement(
-                          'select',
-                          {
-                            name: 'dataTables-example_length',
-                            'aria-controls': 'dataTables-example',
-                            className: 'form-control input-sm',
-                            id: 'show'
-                          },
-                          _react2.default.createElement(
-                            'option',
-                            { value: '10' },
-                            '10'
-                          ),
-                          _react2.default.createElement(
-                            'option',
-                            { value: '25' },
-                            '25'
-                          ),
-                          _react2.default.createElement(
-                            'option',
-                            { value: '50' },
-                            '50'
-                          ),
-                          _react2.default.createElement(
-                            'option',
-                            { value: '100' },
-                            '100'
-                          )
-                        ),
-                        'entries'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'col-sm-3' },
-                    _react2.default.createElement(
-                      'div',
-                      { id: 'dataTables-example_filter', className: 'dataTables_filter' },
-                      _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'search' },
-                        'Search:',
-                        _react2.default.createElement('input', {
-                          type: 'search',
-                          className: 'form-control input-sm',
-                          placeholder: '',
-                          'aria-controls': 'dataTables-example',
-                          id: 'search'
-                        })
-                      )
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'row' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'col-sm-12' },
-                    _react2.default.createElement(
-                      'table',
-                      {
-                        className: 'table table-striped table-bordered table-hover dataTable no-footer',
-                        id: 'dataTables-example',
-                        role: 'grid',
-                        'aria-describedby': 'dataTables-example_info'
-                      },
-                      _react2.default.createElement(
-                        'thead',
-                        null,
-                        _react2.default.createElement(
-                          'tr',
-                          { role: 'row' },
-                          _react2.default.createElement(
-                            'th',
-                            {
-                              className: 'sorting_asc',
-                              tabIndex: '0',
-                              'aria-controls': 'dataTables-example',
-                              rowSpan: '1',
-                              colSpan: '1',
-                              'aria-label': 'Rendering engine: activate to sort column descending',
-                              'aria-sort': 'ascending',
-                              style: { width: 265 }
-                            },
-                            'Rendering engine'
-                          ),
-                          _react2.default.createElement(
-                            'th',
-                            {
-                              className: 'sorting',
-                              tabIndex: '0',
-                              'aria-controls': 'dataTables-example',
-                              rowSpan: '1',
-                              colSpan: '1',
-                              'aria-label': 'Browser: activate to sort column ascending',
-                              style: { width: 321 }
-                            },
-                            'Browser'
-                          ),
-                          _react2.default.createElement(
-                            'th',
-                            {
-                              className: 'sorting',
-                              tabIndex: '0',
-                              'aria-controls': 'dataTables-example',
-                              rowSpan: '1',
-                              colSpan: '1',
-                              'aria-label': 'Platform(s): activate to sort column ascending',
-                              style: { width: 299 }
-                            },
-                            'Platform(s)'
-                          ),
-                          _react2.default.createElement(
-                            'th',
-                            {
-                              className: 'sorting',
-                              tabIndex: '0',
-                              'aria-controls': 'dataTables-example',
-                              rowSpan: '1',
-                              colSpan: '1',
-                              'aria-label': 'Engine version: activate to sort column ascending',
-                              style: { width: 231 }
-                            },
-                            'Engine version'
-                          ),
-                          _react2.default.createElement(
-                            'th',
-                            {
-                              className: 'sorting',
-                              tabIndex: '0',
-                              'aria-controls': 'dataTables-example',
-                              rowSpan: '1',
-                              colSpan: '1',
-                              'aria-label': 'CSS grade: activate to sort column ascending',
-                              style: { width: 180 }
-                            },
-                            'CSS grade'
-                          )
-                        )
-                      ),
-                      _react2.default.createElement(
-                        'tbody',
-                        null,
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA odd', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Firefox 1.0'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 98+ / OSX.2+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.7'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA even', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Firefox 1.5'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 98+ / OSX.2+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA odd', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Firefox 2.0'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 98+ / OSX.2+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA even', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Firefox 3.0'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 2k+ / OSX.3+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.9'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA odd', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Camino 1.0'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'OSX.2+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA even', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Camino 1.5'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'OSX.3+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA odd', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Netscape 7.2'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 95+ / Mac OS 8.6-9.2'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.7'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA even', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Netscape Browser 8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 98SE+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.7'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA odd', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Netscape Navigator 9'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 98+ / OSX.2+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1.8'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        ),
-                        _react2.default.createElement(
-                          'tr',
-                          { className: 'gradeA even', role: 'row' },
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'sorting_1' },
-                            'Gecko'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Mozilla 1.0'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            null,
-                            'Win 95+ / OSX.1+'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            '1'
-                          ),
-                          _react2.default.createElement(
-                            'td',
-                            { className: 'center' },
-                            'A'
-                          )
-                        )
-                      )
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'row' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'col-sm-6' },
-                    _react2.default.createElement(
-                      'div',
-                      {
-                        className: 'dataTables_info',
-                        id: 'dataTables-example_info',
-                        role: 'status',
-                        'aria-live': 'polite'
-                      },
-                      'Showing 1 to 10 of 57 entries'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'col-sm-6 pullRight ' },
-                    _react2.default.createElement(_Pagination2.default, {
-                      activePage: 1,
-                      items: 6,
-                      first: true,
-                      last: true,
-                      prev: true,
-                      next: true,
-                      onSelect: function onSelect() {
-                        // function for Pagination
-                      }
-                    })
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _Well2.default,
-              null,
-              _react2.default.createElement(
-                'h4',
-                null,
-                'DataTables Usage Information'
-              ),
-              _react2.default.createElement(
-                'p',
-                null,
-                'DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at ',
-                _react2.default.createElement(
-                  'a',
-                  { target: '_blank', rel: 'noopener noreferrer', href: 'https://datatables.net/' },
-                  '\'https://datatables.net/\''
-                ),
-                '.'
-              ),
-              _react2.default.createElement(
-                _Button2.default,
-                { bsSize: 'large', block: true, href: 'https://datatables.net/' },
-                'View DataTables Documentation'
-              )
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row ng-scope' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Kitchen Sink '
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table table-striped table-bordered table-hover' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username '
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo '
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat '
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter '
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Basic Table'
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username '
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo '
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row ng-scope' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Striped Rows '
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table table-striped' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username '
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo '
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter '
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Bordered Table '
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive table-bordered' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username '
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton'
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter '
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row ng-scope' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Hover Rows '
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table table-hover' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter '
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-lg-6' },
-          _react2.default.createElement(
-            _Panel2.default,
-            { header: _react2.default.createElement(
-                'span',
-                null,
-                'Context Classes '
-              ) },
-            _react2.default.createElement(
-              'div',
-              { className: 'table-responsive' },
-              _react2.default.createElement(
-                'table',
-                { className: 'table' },
-                _react2.default.createElement(
-                  'thead',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    null,
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      '# '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'First Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Last Name '
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Username '
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tbody',
-                  null,
-                  _react2.default.createElement(
-                    'tr',
-                    { className: 'success' },
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '1 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Mark '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Otto '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@mdo'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    { className: 'info' },
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '2 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Jacob '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Thornton '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@fat'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    { className: 'warning' },
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '3 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Larry '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'the Bird '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@twitter'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'tr',
-                    { className: 'danger' },
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '4 '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'John '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      'Smith '
-                    ),
-                    _react2.default.createElement(
-                      'td',
-                      null,
-                      '@jsmith '
-                    )
-                  )
-                )
-              )
-            )
-          )
+          'Stranica je u pripremi'
         )
       )
     );
@@ -23381,9 +22087,48 @@ module.exports =
   
   var _InputGroupAddon2 = _interopRequireDefault(_InputGroupAddon);
   
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var title = 'Forms';
+  
+  function submitHandler(e) {
+    e.preventDefault();
+    //history.push('/');
+  
+    var username = document.getElementById("iUsername").value;
+    var email = document.getElementById("iEmail").value;
+    var pass = document.getElementById("iPassword").value;
+    var passConfirm = document.getElementById("iPasswordConfirm").value;
+  
+    if (pass != passConfirm) {
+      alert("Šifra za potvrdu mora biti jednaka orginalnoj šifri.");
+    } else {
+      _axios2.default.post('http://localhost:8080/predavaci', {
+        korisnickoIme: username,
+        sifra: pass,
+        email: email,
+        adresaBoravista: document.getElementById("iAdresaBoravista").value,
+        datumRodjenja: document.getElementById("iDatumRodjenja").value,
+        ime: document.getElementById("iIme").value,
+        jmbg: document.getElementById("iJmbg").value,
+        mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
+        prezime: document.getElementById("iPrezime").value,
+        kurs: document.getElementById("ikurs").value,
+        idkurs: document.getElementById("iidkurs").value
+  
+      }).then(function (response) {
+        console.log("Register response", response.data.isSuccess);
+        alert("Uspješno ste se registrovali. Sada se možete logovati sa registrovanim podacima.");
+      }).catch(function (error) {
+        console.error("Register error", error);
+        alert("Došlo je do greške prilikom registrovanja.");
+      });
+    }
+  }
   
   function displayForms(props, context) {
     context.setTitle(title);
@@ -23424,143 +22169,148 @@ module.exports =
                 { className: 'col-lg-6' },
                 _react2.default.createElement(
                   _reactBootstrap.Form,
-                  null,
+                  { role: 'form', onSubmit: function onSubmit(e) {
+                      submitHandler(e);
+                    } },
                   _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    {
-                      controlId: 'formBasicText'
-                    },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Ime'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text'
-                    }),
-                    _react2.default.createElement(_FormControlFeedback2.default, null),
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Prezime'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text'
-                    }),
-                    _react2.default.createElement(_FormControlFeedback2.default, null),
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Telefon'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text'
-                    }),
-                    _react2.default.createElement(_FormControlFeedback2.default, null),
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'E-mail'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text'
-                    }),
-                    _react2.default.createElement(
-                      _reactBootstrap.FormGroup,
-                      null,
-                      _react2.default.createElement(
-                        _FormControlStatic2.default,
-                        null,
-                        'email@example.com'
-                      )
-                    ),
-                    _react2.default.createElement(_FormControlFeedback2.default, null)
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'formBasicText2' },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      '\u0160ifra'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text',
-                      placeholder: 'Enter Text'
-                    }),
-                    _react2.default.createElement(
-                      _reactBootstrap.HelpBlock,
-                      null,
-                      '\u0160ifra mora biti jedna rijec koja sadrzi slova.'
-                    ),
-                    _react2.default.createElement(_FormControlFeedback2.default, null)
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    {
-                      controlId: 'formBasicFile'
-                    },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Slika: '
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'file'
-                    }),
-                    _react2.default.createElement(_FormControlFeedback2.default, null)
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'formControlsSelect' },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Jezik koji predaje'
-                    ),
-                    _react2.default.createElement(
-                      _reactBootstrap.FormControl,
-                      { componentClass: 'select', placeholder: 'select' },
-                      _react2.default.createElement(
-                        'option',
-                        { value: '1' },
-                        'Njemacki jezik A1'
-                      ),
-                      _react2.default.createElement(
-                        'option',
-                        { value: '2' },
-                        'Njemacki jezik A2'
-                      ),
-                      _react2.default.createElement(
-                        'option',
-                        { value: '3' },
-                        'Njemacki jezik A3'
-                      ),
-                      _react2.default.createElement(
-                        'option',
-                        { value: '4' },
-                        'Njemacki jezik A4'
-                      ),
-                      _react2.default.createElement(
-                        'option',
-                        { value: '5' },
-                        '5'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
+                    'fieldset',
                     null,
                     _react2.default.createElement(
-                      _reactBootstrap.Button,
-                      { type: 'submit' },
-                      'Dodaj u\u010Ditelja!'
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Username',
+                        name: 'name',
+                        id: 'iUsername'
+                      })
                     ),
-                    '  ',
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'E-mail',
+                        name: 'email',
+                        id: 'iEmail'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        className: 'form-control',
+                        placeholder: 'Password',
+                        type: 'password',
+                        name: 'password',
+                        id: 'iPassword'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        className: 'form-control',
+                        placeholder: 'Confirm Password',
+                        type: 'password',
+                        name: 'password',
+                        id: 'iPasswordConfirm'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Adresa boravista',
+                        name: 'adresaBoravista',
+                        id: 'iAdresaBoravista'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'date',
+                        className: 'form-control',
+                        placeholder: 'Datum ro\u0111enja',
+                        name: 'datumRodjenja',
+                        id: 'iDatumRodjenja'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Ime',
+                        name: 'ime',
+                        id: 'iIme'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'JMBG',
+                        name: 'jmbg',
+                        id: 'iJmbg'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Mjesto ro\u0111enja',
+                        name: 'mjestoRodjenja',
+                        id: 'iMjestoRodjenja'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Prezime',
+                        name: 'prezime',
+                        id: 'iPrezime'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'kurs',
+                        name: 'kurs',
+                        id: 'ikurs'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Stepen kursa',
+                        name: 'idkurs',
+                        id: 'iidkurs'
+                      })
+                    ),
                     _react2.default.createElement(
                       _reactBootstrap.Button,
-                      { type: 'reset' },
-                      'Resetuj: '
+                      { type: 'submit', bsSize: 'large', bsStyle: 'success', block: true },
+                      'Registruj profesora'
                     )
                   )
                 )
@@ -23577,280 +22327,8 @@ module.exports =
   exports.default = displayForms;
 
 /***/ }),
-/* 184 */
-/***/ (function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _react = __webpack_require__(12);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _SviKorisnici = __webpack_require__(185);
-  
-  var _SviKorisnici2 = _interopRequireDefault(_SviKorisnici);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  exports.default = {
-  
-    path: '/svikorisnici',
-  
-    action: function action() {
-      return _react2.default.createElement(_SviKorisnici2.default, null);
-    }
-  };
-
-/***/ }),
-/* 185 */
-/***/ (function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _react = __webpack_require__(12);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _Button = __webpack_require__(158);
-  
-  var _Button2 = _interopRequireDefault(_Button);
-  
-  var _Panel = __webpack_require__(159);
-  
-  var _Panel2 = _interopRequireDefault(_Panel);
-  
-  var _Pagination = __webpack_require__(170);
-  
-  var _Pagination2 = _interopRequireDefault(_Pagination);
-  
-  var _PageHeader = __webpack_require__(171);
-  
-  var _PageHeader2 = _interopRequireDefault(_PageHeader);
-  
-  var _Well = __webpack_require__(172);
-  
-  var _Well2 = _interopRequireDefault(_Well);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var title = 'Table';
-  
-  function displayTable(props, context) {
-    context.setTitle(title);
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-12' },
-        _react2.default.createElement(
-          _PageHeader2.default,
-          null,
-          'Svi korisnici'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-6' },
-        _react2.default.createElement(
-          _Panel2.default,
-          { header: _react2.default.createElement(
-              'span',
-              null,
-              'U\u010Denici '
-            ) },
-          _react2.default.createElement(
-            'div',
-            { className: 'table-responsive' },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-striped table-bordered table-hover' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Ime'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Prezime '
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Izbrisi korisnika'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajla'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Sukrija '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajlica '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    ' Sukrijcia'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-6' },
-        _react2.default.createElement(
-          _Panel2.default,
-          { header: _react2.default.createElement(
-              'span',
-              null,
-              'Profesori: '
-            ) },
-          _react2.default.createElement(
-            'div',
-            { className: 'table-responsive' },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-striped table-bordered table-hover' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Ime'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Prezime '
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Izbrisi korisnika'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajla'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Sukrija '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajlica '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    ' Sukrijcia'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    );
-  }
-  
-  displayTable.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
-  
-  exports.default = displayTable;
-
-/***/ }),
+/* 184 */,
+/* 185 */,
 /* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23928,193 +22406,7 @@ module.exports =
         _react2.default.createElement(
           _PageHeader2.default,
           null,
-          'Svi korisnici'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-6' },
-        _react2.default.createElement(
-          _Panel2.default,
-          { header: _react2.default.createElement(
-              'span',
-              null,
-              'U\u010Denici '
-            ) },
-          _react2.default.createElement(
-            'div',
-            { className: 'table-responsive' },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-striped table-bordered table-hover' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Ime'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Prezime '
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Izbrisi korisnika'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajla'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Sukrija '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajlica '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    ' Sukrijcia'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-lg-6' },
-        _react2.default.createElement(
-          _Panel2.default,
-          { header: _react2.default.createElement(
-              'span',
-              null,
-              'Profesori: '
-            ) },
-          _react2.default.createElement(
-            'div',
-            { className: 'table-responsive' },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-striped table-bordered table-hover' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Ime'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Prezime '
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    null,
-                    'Izbrisi korisnika'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajla'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Sukrija '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    'Ajlica '
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    ' Sukrijcia'
-                  ),
-                  _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { type: 'button' },
-                      'Izbrisi'
-                    )
-                  )
-                )
-              )
-            )
-          )
+          'stranica u pripremi'
         )
       )
     );
@@ -24253,9 +22545,35 @@ module.exports =
   
   var _InputGroupAddon2 = _interopRequireDefault(_InputGroupAddon);
   
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var title = 'DodavanjeLekcijeForma';
+  
+  function submitHandler(e) {
+    e.preventDefault();
+    //history.push('/');
+  
+    var username = document.getElementById("iUsername").value;
+    var email = document.getElementById("iEmail").value;
+  
+    _axios2.default.post('http://localhost:8080/studenti', {
+      korisnickoIme: username,
+  
+      mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
+      prezime: document.getElementById("iPrezime").value
+  
+    }).then(function (response) {
+      console.log("Register response", response.data.isSuccess);
+      alert("Uspješno ste se registrovali. Sada se možete logovati sa registrovanim podacima.");
+    }).catch(function (error) {
+      console.error("Register error", error);
+      alert("Došlo je do greške prilikom registrovanja.");
+    });
+  }
   
   function displayForms(props, context) {
     context.setTitle(title);
@@ -24335,7 +22653,6 @@ module.exports =
                       { type: 'submit' },
                       'Dodaj lekciju'
                     ),
-                    '  ',
                     _react2.default.createElement(
                       _reactBootstrap.Button,
                       { type: 'reset' },
@@ -24571,9 +22888,34 @@ module.exports =
   
   var _InputGroupAddon2 = _interopRequireDefault(_InputGroupAddon);
   
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var title = 'DodavanjeTerminaForma';
+  var title = 'DodavanjeLekcijeForma';
+  
+  function submitHandler(e) {
+    e.preventDefault();
+    //history.push('/');
+  
+    var naziv = document.getElementById("inaziv").value;
+    var stepen = document.getElementById("istepen").value;
+    var opis = document.getElementById('iopis').value;
+    _axios2.default.post('http://localhost:8080/objaviTermin', {
+      nazivKursa: naziv,
+      stepenKursa: stepen,
+      opisPredavanja: opis
+  
+    }).then(function (response) {
+      console.log("Register response", response.data.isSuccess);
+      alert("Uspješno ste dodali termin.");
+    }).catch(function (error) {
+      console.error("Register error", error);
+      alert("Došlo je do greške prilikom registrovanja.");
+    });
+  }
   
   function displayForms(props, context) {
     context.setTitle(title);
@@ -24589,7 +22931,7 @@ module.exports =
           _react2.default.createElement(
             _reactBootstrap.PageHeader,
             null,
-            'Dodaj u\u010Ditelja'
+            'dodaj termin predavanja'
           )
         )
       ),
@@ -24604,7 +22946,7 @@ module.exports =
             { header: _react2.default.createElement(
                 'span',
                 null,
-                'Unesite novog ucitelja'
+                'unesi'
               ) },
             _react2.default.createElement(
               'div',
@@ -24614,50 +22956,49 @@ module.exports =
                 { className: 'col-lg-6' },
                 _react2.default.createElement(
                   _reactBootstrap.Form,
-                  null,
+                  { role: 'form', onSubmit: function onSubmit(e) {
+                      submitHandler(e);
+                    } },
                   _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'formBasicText2' },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Naziv lekcije'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'text',
-                      placeholder: 'Enter Text'
-                    }),
-                    _react2.default.createElement(_reactBootstrap.HelpBlock, null),
-                    _react2.default.createElement(_FormControlFeedback2.default, null)
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    {
-                      controlId: 'formBasicFile'
-                    },
-                    _react2.default.createElement(
-                      _reactBootstrap.ControlLabel,
-                      null,
-                      'Uploaduj lekciju'
-                    ),
-                    _react2.default.createElement(_reactBootstrap.FormControl, {
-                      type: 'file'
-                    }),
-                    _react2.default.createElement(_FormControlFeedback2.default, null)
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
+                    'fieldset',
                     null,
                     _react2.default.createElement(
-                      _reactBootstrap.Button,
-                      { type: 'submit' },
-                      'Dodaj lekciju'
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Naziv',
+                        name: 'naziv',
+                        id: 'inaziv'
+                      })
                     ),
-                    '  ',
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Stepen kursa',
+                        name: 'stepen',
+                        id: 'istepen'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'opis termina ',
+                        name: 'opis',
+                        id: 'iopis'
+                      })
+                    ),
                     _react2.default.createElement(
                       _reactBootstrap.Button,
-                      { type: 'reset' },
-                      'Resetuj: '
+                      { type: 'submit', bsSize: 'large', bsStyle: 'success', block: true },
+                      'Register'
                     )
                   )
                 )
@@ -29803,254 +28144,154 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(40);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(41);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(42);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(43);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(44);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
   var _react = __webpack_require__(12);
   
   var _react2 = _interopRequireDefault(_react);
-  
-  var _Panel = __webpack_require__(159);
-  
-  var _Panel2 = _interopRequireDefault(_Panel);
-  
-  var _Alert = __webpack_require__(160);
-  
-  var _Alert2 = _interopRequireDefault(_Alert);
   
   var _Button = __webpack_require__(158);
   
   var _Button2 = _interopRequireDefault(_Button);
   
-  var _OverlayTrigger = __webpack_require__(211);
+  var _Panel = __webpack_require__(159);
   
-  var _OverlayTrigger2 = _interopRequireDefault(_OverlayTrigger);
+  var _Panel2 = _interopRequireDefault(_Panel);
   
-  var _Tooltip = __webpack_require__(212);
+  var _Pagination = __webpack_require__(170);
   
-  var _Tooltip2 = _interopRequireDefault(_Tooltip);
-  
-  var _Popover = __webpack_require__(213);
-  
-  var _Popover2 = _interopRequireDefault(_Popover);
-  
-  var _Modal = __webpack_require__(214);
-  
-  var _Modal2 = _interopRequireDefault(_Modal);
+  var _Pagination2 = _interopRequireDefault(_Pagination);
   
   var _PageHeader = __webpack_require__(171);
   
   var _PageHeader2 = _interopRequireDefault(_PageHeader);
   
+  var _Well = __webpack_require__(172);
+  
+  var _Well2 = _interopRequireDefault(_Well);
+  
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var Notification = function (_Component) {
-    (0, _inherits3.default)(Notification, _Component);
+  var title = 'Table';
+  //context.setTitle(title);
   
-    function Notification(props) {
-      (0, _classCallCheck3.default)(this, Notification);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (Notification.__proto__ || (0, _getPrototypeOf2.default)(Notification)).call(this, props));
+  //function displayTable(props, context) {
+  var displayTable = _react2.default.createClass({
+    displayName: 'displayTable',
   
-      _this.state = {
-        alertVisibleA: true,
-        alertVisibleB: true,
-        alertVisibleC: true,
-        alertVisibleD: true,
-        showModal: false
+  
+    getInitialState: function getInitialState() {
+      return {
+        users: []
       };
-      _this.handleAlertDismiss = _this.handleAlertDismiss.bind(_this);
-      return _this;
-    }
+    },
   
-    (0, _createClass3.default)(Notification, [{
-      key: 'close',
-      value: function close() {
-        this.setState({ showModal: false });
-      }
-    }, {
-      key: 'open',
-      value: function open() {
-        this.setState({ showModal: true });
-      }
-    }, {
-      key: 'handleAlertDismiss',
-      value: function handleAlertDismiss(option) {
-        switch (option) {
-          case 'A':
-            this.setState({ alertVisibleA: false });
-            break;
-          case 'B':
-            this.setState({ alertVisibleB: false });
-            break;
-          case 'C':
-            this.setState({ alertVisibleC: false });
-            break;
-          case 'D':
-            this.setState({ alertVisibleD: false });
-            break;
-          default:
-            this.setState({
-              alertVisibleA: false,
-              alertVisibleB: false,
-              alertVisibleC: false,
-              alertVisibleD: false
-            });
-        }
-      }
-    }, {
-      key: 'render',
-      value: function render() {
-        return _react2.default.createElement(
+    componentDidMount: function componentDidMount() {
+      var _this = this;
+      _axios2.default.get("http://localhost:8080/studenti").then(function (result) {
+        _this.setState({
+          users: result.data
+        });
+      });
+    },
+  
+    render: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
           'div',
-          null,
+          { className: 'col-lg-12' },
           _react2.default.createElement(
-            'div',
-            { className: 'row' },
-            _react2.default.createElement(
-              'div',
-              { className: 'col-lg-12' },
-              _react2.default.createElement(
-                _PageHeader2.default,
+            _PageHeader2.default,
+            null,
+            'Najnovije obavjesti'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-6' },
+          _react2.default.createElement(
+            _Panel2.default,
+            { header: _react2.default.createElement(
+                'span',
                 null,
-                'Novosti: '
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'row' },
+                'NOVOSTI! '
+              ) },
             _react2.default.createElement(
               'div',
-              { className: 'col-lg-6' },
+              { className: 'table-responsive' },
               _react2.default.createElement(
-                _Panel2.default,
-                { header: _react2.default.createElement(
-                    'span',
+                'table',
+                { className: 'table table-striped table-bordered table-hover' },
+                _react2.default.createElement(
+                  'thead',
+                  null,
+                  _react2.default.createElement(
+                    'tr',
                     null,
-                    'Alert Styles'
-                  ) },
-                _react2.default.createElement(
-                  _Alert2.default,
-                  { bsStyle: 'success' },
-                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                  _react2.default.createElement(
-                    'a',
-                    {
-                      href: '',
-                      onClick: function onClick(e) {
-                        e.preventDefault();
-                      },
-                      className: 'alert-link'
-                    },
-                    'Alert Link'
-                  ),
-                  '.'
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Naziv'
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Kurs '
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Itekst'
+                    )
+                  )
                 ),
                 _react2.default.createElement(
-                  _Alert2.default,
-                  { bsStyle: 'info' },
-                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                  _react2.default.createElement(
-                    'a',
-                    {
-                      href: '',
-                      onClick: function onClick(e) {
-                        e.preventDefault();
-                      },
-                      className: 'alert-link'
-                    },
-                    'Alert Link'
-                  ),
-                  '.'
-                ),
-                _react2.default.createElement(
-                  _Alert2.default,
-                  { bsStyle: 'warning' },
-                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                  _react2.default.createElement(
-                    'a',
-                    {
-                      href: '',
-                      onClick: function onClick(e) {
-                        e.preventDefault();
-                      },
-                      className: 'alert-link'
-                    },
-                    'Alert Link'
-                  ),
-                  '.'
-                ),
-                _react2.default.createElement(
-                  _Alert2.default,
-                  { bsStyle: 'danger' },
-                  'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-                  _react2.default.createElement(
-                    'a',
-                    {
-                      href: '',
-                      onClick: function onClick(e) {
-                        e.preventDefault();
-                      },
-                      className: 'alert-link'
-                    },
-                    'Alert Link'
-                  ),
-                  '.'
+                  'tbody',
+                  null,
+                  this.state.users.map(function (user) {
+                    return _react2.default.createElement(
+                      'tr',
+                      { key: '{user.id}' },
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.ime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.prezime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        'Kursce se odrzati2222nekog u nekoliko sati'
+                      )
+                    );
+                  })
                 )
               )
             )
           )
-        );
-      }
-    }]);
-    return Notification;
-  }(_react.Component);
+        )
+      );
+    }
+  });
   
-  exports.default = Notification;
+  //displayTable.contextTypes = { setTitle: PropTypes.func.isRequired };
+  
+  exports.default = displayTable;
 
 /***/ }),
-/* 211 */
-/***/ (function(module, exports) {
-
-  module.exports = require("react-bootstrap/lib/OverlayTrigger");
-
-/***/ }),
-/* 212 */
-/***/ (function(module, exports) {
-
-  module.exports = require("react-bootstrap/lib/Tooltip");
-
-/***/ }),
-/* 213 */
-/***/ (function(module, exports) {
-
-  module.exports = require("react-bootstrap/lib/Popover");
-
-/***/ }),
-/* 214 */
-/***/ (function(module, exports) {
-
-  module.exports = require("react-bootstrap/lib/Modal");
-
-/***/ }),
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31524,27 +29765,31 @@ module.exports =
     context.setTitle(title);
     return _react2.default.createElement(
       'div',
-      { className: 'col-md-4 col-md-offset-4' },
+      null,
       _react2.default.createElement(
-        _Panel2.default,
-        { header: _react2.default.createElement(
-            'h3',
-            null,
-            'Dobrodo\u0161li u \u0161kolu stranih jezika! bla bla bla.. ovdje cemo malo srediti jos.. nekoliko ruta..  kontaktrija (nije u srsu -- :)'
-          ), className: 'login-panel' },
+        'div',
+        { className: 'col-md-3 col-md-offset-3' },
         _react2.default.createElement(
-          _Button2.default,
-          { type: 'submit', bsSize: 'large', bsStyle: 'success', onClick: function onClick(event) {
-              _history2.default.push('/login');
-            }, block: true },
-          'Login'
-        ),
-        _react2.default.createElement(
-          _Button2.default,
-          { type: 'submit', bsSize: 'large', bsStyle: 'success', onClick: function onClick(event) {
-              _history2.default.push('/register');
-            }, block: true },
-          'Register'
+          _Panel2.default,
+          { header: _react2.default.createElement(
+              'h3',
+              null,
+              'Dobrodo\u0161li u \u0161kolu stranih jezika! bla bla bla.. ovdje cemo malo srediti jos.. nekoliko ruta..  kontaktrija (nije u srsu -- :)'
+            ), className: 'login-panel' },
+          _react2.default.createElement(
+            _Button2.default,
+            { type: 'submit', bsSize: 'large', bsStyle: 'success', onClick: function onClick(event) {
+                _history2.default.push('/login');
+              }, block: true },
+            'Login'
+          ),
+          _react2.default.createElement(
+            _Button2.default,
+            { type: 'submit', bsSize: 'large', bsStyle: 'success', onClick: function onClick(event) {
+                _history2.default.push('/register');
+              }, block: true },
+            'Register'
+          )
         )
       )
     );
@@ -31620,6 +29865,880 @@ module.exports =
 /***/ (function(module, exports) {
 
   module.exports = require("./assets");
+
+/***/ }),
+/* 227 */,
+/* 228 */,
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _SviKorisnici = __webpack_require__(230);
+  
+  var _SviKorisnici2 = _interopRequireDefault(_SviKorisnici);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  exports.default = {
+  
+    path: '/svikorisnicipredavaci',
+  
+    action: function action() {
+      return _react2.default.createElement(_SviKorisnici2.default, null);
+    }
+  };
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _Button = __webpack_require__(158);
+  
+  var _Button2 = _interopRequireDefault(_Button);
+  
+  var _Panel = __webpack_require__(159);
+  
+  var _Panel2 = _interopRequireDefault(_Panel);
+  
+  var _Pagination = __webpack_require__(170);
+  
+  var _Pagination2 = _interopRequireDefault(_Pagination);
+  
+  var _PageHeader = __webpack_require__(171);
+  
+  var _PageHeader2 = _interopRequireDefault(_PageHeader);
+  
+  var _Well = __webpack_require__(172);
+  
+  var _Well2 = _interopRequireDefault(_Well);
+  
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var title = 'Table';
+  //context.setTitle(title);
+  
+  
+  function submitHandler(sifra) {
+  
+    //history.push('/');
+  
+    _axios2.default.post('http://localhost:8080//obrisiPredavaca/{id}', {
+      id: sifra
+    }).then(function (response) {
+      console.log("Register response", response.data.isSuccess);
+      alert("Uspješno ste se obrisalikorisnika");
+    }).catch(function (error) {
+      console.error("Register error", error);
+      alert("Došlo je do greške prilikom brisanja.");
+    });
+  }
+  
+  //function displayTable(props, context) {
+  var displayTable = _react2.default.createClass({
+    displayName: 'displayTable',
+  
+  
+    getInitialState: function getInitialState() {
+      return {
+        users: []
+      };
+    },
+  
+    componentDidMount: function componentDidMount() {
+      var _this = this;
+      _axios2.default.get("http://localhost:8080/predavaci").then(function (result) {
+        _this.setState({
+          users: result.data
+  
+        });
+      });
+    },
+  
+    render: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-12' },
+          _react2.default.createElement(
+            _PageHeader2.default,
+            null,
+            'Edituj listu korisnika -tip -Preadavci'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-6' },
+          _react2.default.createElement(
+            _Panel2.default,
+            { header: _react2.default.createElement(
+                'span',
+                null,
+                'Predavaci'
+              ) },
+            _react2.default.createElement(
+              'div',
+              { className: 'table-responsive' },
+              _react2.default.createElement(
+                'table',
+                { className: 'table table-striped table-bordered table-hover' },
+                _react2.default.createElement(
+                  'thead',
+                  null,
+                  _react2.default.createElement(
+                    'tr',
+                    null,
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Ime'
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Prezime '
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Izbrisi korisnika'
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  'tbody',
+                  null,
+                  this.state.users.map(function (user) {
+                    return _react2.default.createElement(
+                      'tr',
+                      { key: '{user.id}' },
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.ime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.prezime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                          'button',
+                          { type: 'button', onClick: function onClick(event) {
+                              submitHandler("{user.id}");
+                            } },
+                          'Izbrisi'
+                        )
+                      )
+                    );
+                  })
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  });
+  
+  //displayTable.contextTypes = { setTitle: PropTypes.func.isRequired };
+  
+  exports.default = displayTable;
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _SviKorisnici = __webpack_require__(232);
+  
+  var _SviKorisnici2 = _interopRequireDefault(_SviKorisnici);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  exports.default = {
+  
+    path: '/svikorisnicistudenti',
+  
+    action: function action() {
+      return _react2.default.createElement(_SviKorisnici2.default, null);
+    }
+  };
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _Button = __webpack_require__(158);
+  
+  var _Button2 = _interopRequireDefault(_Button);
+  
+  var _Panel = __webpack_require__(159);
+  
+  var _Panel2 = _interopRequireDefault(_Panel);
+  
+  var _Pagination = __webpack_require__(170);
+  
+  var _Pagination2 = _interopRequireDefault(_Pagination);
+  
+  var _PageHeader = __webpack_require__(171);
+  
+  var _PageHeader2 = _interopRequireDefault(_PageHeader);
+  
+  var _Well = __webpack_require__(172);
+  
+  var _Well2 = _interopRequireDefault(_Well);
+  
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var title = 'Table';
+  //context.setTitle(title);
+  
+  
+  function submitHandler(sifra) {
+  
+    //history.push('/');
+  
+    _axios2.default.post('http://localhost:8080//obrisiStudenta/{id}', {
+      id: sifra
+    }).then(function (response) {
+      console.log("Register response", response.data.isSuccess);
+      alert("Uspješno ste se obrisalikorisnika");
+    }).catch(function (error) {
+      console.error("Register error", error);
+      alert("Došlo je do greške prilikom brisanja.");
+    });
+  }
+  
+  //function displayTable(props, context) {
+  var displayTable = _react2.default.createClass({
+    displayName: 'displayTable',
+  
+  
+    getInitialState: function getInitialState() {
+      return {
+        users: []
+      };
+    },
+  
+    componentDidMount: function componentDidMount() {
+      var _this = this;
+      _axios2.default.get("http://localhost:8080/studenti").then(function (result) {
+        _this.setState({
+          users: result.data
+        });
+      });
+    },
+  
+    render: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-12' },
+          _react2.default.createElement(
+            _PageHeader2.default,
+            null,
+            'Svi korisnici'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-6' },
+          _react2.default.createElement(
+            _Panel2.default,
+            { header: _react2.default.createElement(
+                'span',
+                null,
+                'U\u010Denici '
+              ) },
+            _react2.default.createElement(
+              'div',
+              { className: 'table-responsive' },
+              _react2.default.createElement(
+                'table',
+                { className: 'table table-striped table-bordered table-hover' },
+                _react2.default.createElement(
+                  'thead',
+                  null,
+                  _react2.default.createElement(
+                    'tr',
+                    null,
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Ime'
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Prezime '
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Izbrisi korisnika'
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  'tbody',
+                  null,
+                  this.state.users.map(function (user) {
+                    return _react2.default.createElement(
+                      'tr',
+                      { key: '{user.id}' },
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.ime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.prezime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                          'button',
+                          { type: 'button', onClick: function onClick(event) {
+                              submitHandler("{user.id}");
+                            } },
+                          'Izbrisi'
+                        )
+                      )
+                    );
+                  })
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  });
+  
+  //displayTable.contextTypes = { setTitle: PropTypes.func.isRequired };
+  
+  exports.default = displayTable;
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _forms = __webpack_require__(234);
+  
+  var _forms2 = _interopRequireDefault(_forms);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  exports.default = {
+  
+    path: '/dodajadmina',
+  
+    action: function action() {
+      return _react2.default.createElement(_forms2.default, null);
+    }
+  };
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _reactBootstrap = __webpack_require__(49);
+  
+  var _FormControlFeedback = __webpack_require__(179);
+  
+  var _FormControlFeedback2 = _interopRequireDefault(_FormControlFeedback);
+  
+  var _FormControlStatic = __webpack_require__(180);
+  
+  var _FormControlStatic2 = _interopRequireDefault(_FormControlStatic);
+  
+  var _InputGroupAddon = __webpack_require__(181);
+  
+  var _InputGroupAddon2 = _interopRequireDefault(_InputGroupAddon);
+  
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var title = 'DodajAdmina';
+  
+  function submitHandler(e) {
+    e.preventDefault();
+    //history.push('/');
+  
+    var username = document.getElementById("iUsername").value;
+    var email = document.getElementById("iEmail").value;
+    var pass = document.getElementById("iPassword").value;
+    var passConfirm = document.getElementById("iPasswordConfirm").value;
+  
+    if (pass != passConfirm) {
+      alert("Šifra za potvrdu mora biti jednaka orginalnoj šifri.");
+    } else {
+      _axios2.default.post('http://localhost:8080/administratori', {
+        korisnickoIme: username,
+        sifra: pass,
+        email: email,
+        adresaBoravista: document.getElementById("iAdresaBoravista").value,
+        datumRodjenja: document.getElementById("iDatumRodjenja").value,
+        ime: document.getElementById("iIme").value,
+        jmbg: document.getElementById("iJmbg").value,
+        mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
+        prezime: document.getElementById("iPrezime").value
+  
+      }).then(function (response) {
+        console.log("Register response", response.data.isSuccess);
+        alert("Uspješno ste se registrovali. Sada se možete logovati sa registrovanim podacima.");
+      }).catch(function (error) {
+        console.error("Register error", error);
+        alert("Došlo je do greške prilikom registrovanja.");
+      });
+    }
+  }
+  
+  function displayForms(props, context) {
+    context.setTitle(title);
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'div',
+        { className: 'row' },
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-12' },
+          _react2.default.createElement(
+            _reactBootstrap.PageHeader,
+            null,
+            'Dodaj administratora'
+          )
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'row' },
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-12' },
+          _react2.default.createElement(
+            _reactBootstrap.Panel,
+            { header: _react2.default.createElement(
+                'span',
+                null,
+                'Unesite novog admina'
+              ) },
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'div',
+                { className: 'col-lg-6' },
+                _react2.default.createElement(
+                  _reactBootstrap.Form,
+                  { role: 'form', onSubmit: function onSubmit(e) {
+                      submitHandler(e);
+                    } },
+                  _react2.default.createElement(
+                    'fieldset',
+                    null,
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Username',
+                        name: 'name',
+                        id: 'iUsername'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'E-mail',
+                        name: 'email',
+                        id: 'iEmail'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        className: 'form-control',
+                        placeholder: 'Password',
+                        type: 'password',
+                        name: 'password',
+                        id: 'iPassword'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        className: 'form-control',
+                        placeholder: 'Confirm Password',
+                        type: 'password',
+                        name: 'password',
+                        id: 'iPasswordConfirm'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Adresa boravista',
+                        name: 'adresaBoravista',
+                        id: 'iAdresaBoravista'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'date',
+                        className: 'form-control',
+                        placeholder: 'Datum ro\u0111enja',
+                        name: 'datumRodjenja',
+                        id: 'iDatumRodjenja'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Ime',
+                        name: 'ime',
+                        id: 'iIme'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'JMBG',
+                        name: 'jmbg',
+                        id: 'iJmbg'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Mjesto ro\u0111enja',
+                        name: 'mjestoRodjenja',
+                        id: 'iMjestoRodjenja'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'form-group' },
+                      _react2.default.createElement(_reactBootstrap.FormControl, {
+                        type: 'text',
+                        className: 'form-control',
+                        placeholder: 'Prezime',
+                        name: 'prezime',
+                        id: 'iPrezime'
+                      })
+                    ),
+                    _react2.default.createElement(
+                      _reactBootstrap.Button,
+                      { type: 'submit', bsSize: 'large', bsStyle: 'success', block: true },
+                      'registruj novog admina'
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+  
+  displayForms.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
+  
+  exports.default = displayForms;
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _SviKorisnici = __webpack_require__(236);
+  
+  var _SviKorisnici2 = _interopRequireDefault(_SviKorisnici);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  exports.default = {
+  
+    path: '/svikorisniciadmini',
+  
+    action: function action() {
+      return _react2.default.createElement(_SviKorisnici2.default, null);
+    }
+  };
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _react = __webpack_require__(12);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _Button = __webpack_require__(158);
+  
+  var _Button2 = _interopRequireDefault(_Button);
+  
+  var _Panel = __webpack_require__(159);
+  
+  var _Panel2 = _interopRequireDefault(_Panel);
+  
+  var _Pagination = __webpack_require__(170);
+  
+  var _Pagination2 = _interopRequireDefault(_Pagination);
+  
+  var _PageHeader = __webpack_require__(171);
+  
+  var _PageHeader2 = _interopRequireDefault(_PageHeader);
+  
+  var _Well = __webpack_require__(172);
+  
+  var _Well2 = _interopRequireDefault(_Well);
+  
+  var _axios = __webpack_require__(163);
+  
+  var _axios2 = _interopRequireDefault(_axios);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var title = 'SviKorisnici';
+  //context.setTitle(title);
+  
+  
+  function submitHandler(sifra) {
+  
+    //history.push('/');
+  
+    _axios2.default.post('http://localhost:8080//obrisiPredavaca/{id}', {
+      id: sifra
+    }).then(function (response) {
+      console.log("Register response", response.data.isSuccess);
+      alert("Uspješno ste se obrisalikorisnika");
+    }).catch(function (error) {
+      console.error("Register error", error);
+      alert("Došlo je do greške prilikom brisanja.");
+    });
+  }
+  
+  //function displayTable(props, context) {
+  var displayTable = _react2.default.createClass({
+    displayName: 'displayTable',
+  
+  
+    getInitialState: function getInitialState() {
+      return {
+        users: []
+      };
+    },
+  
+    componentDidMount: function componentDidMount() {
+      var _this = this;
+      _axios2.default.get("http://localhost:8080/administratori").then(function (result) {
+        _this.setState({
+          users: result.data
+  
+        });
+      });
+    },
+  
+    render: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-12' },
+          _react2.default.createElement(
+            _PageHeader2.default,
+            null,
+            'Edituj listu korisnika -tip -admini'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-lg-6' },
+          _react2.default.createElement(
+            _Panel2.default,
+            { header: _react2.default.createElement(
+                'span',
+                null,
+                'Predavaci'
+              ) },
+            _react2.default.createElement(
+              'div',
+              { className: 'table-responsive' },
+              _react2.default.createElement(
+                'table',
+                { className: 'table table-striped table-bordered table-hover' },
+                _react2.default.createElement(
+                  'thead',
+                  null,
+                  _react2.default.createElement(
+                    'tr',
+                    null,
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Ime'
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Prezime '
+                    ),
+                    _react2.default.createElement(
+                      'th',
+                      null,
+                      'Izbrisi korisnika'
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  'tbody',
+                  null,
+                  this.state.users.map(function (user) {
+                    return _react2.default.createElement(
+                      'tr',
+                      { key: '{user.id}' },
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.ime
+                      ),
+                      _react2.default.createElement(
+                        'td',
+                        null,
+                        user.prezime
+                      )
+                    );
+                  })
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  });
+  
+  //displayTable.contextTypes = { setTitle: PropTypes.func.isRequired };
+  
+  exports.default = displayTable;
 
 /***/ })
 /******/ ]);

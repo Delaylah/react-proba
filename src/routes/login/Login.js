@@ -29,7 +29,9 @@ function submitHandler(e) {
   var username = document.getElementById("iName").value;
   var password = document.getElementById("iPassword").value;
 
-  axios.post('http://localhost:50910/api/login', {
+
+
+  axios.post('http://localhost:8080/logIn', {
     username: username,
     password: password
   })
@@ -50,11 +52,7 @@ function Login(props, context) {
   return (
 
 
-
-
-
-    <div className="col-md-4 col-md-offset-4">
-    
+    <div className="col-md-4 col-md-offset-4">  
       <Panel header={<h3>Please Sign In</h3>} className="login-panel">
 
         <form role="form" onSubmit={(e) => { submitHandler(e); }}>

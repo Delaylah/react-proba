@@ -17,8 +17,36 @@ import {
 import FormControlFeedback from 'react-bootstrap/lib/FormControlFeedback';
 import FormControlStatic from 'react-bootstrap/lib/FormControlStatic';
 import InputGroupAddon from 'react-bootstrap/lib/InputGroupAddon';
+import axios from 'axios';
 
 const title = 'DodavanjeLekcijeForma';
+
+
+
+
+function submitHandler(e) {
+  e.preventDefault();
+  //history.push('/');
+
+  var username = document.getElementById("iUsername").value;
+  var email = document.getElementById("iEmail").value;
+  
+    axios.post('http://localhost:8080/studenti', {
+    korisnickoIme: username,
+   
+    mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
+    prezime: document.getElementById("iPrezime").value
+
+  })
+  .then(function (response) {
+    console.log("Register response", response.data.isSuccess);
+    alert("Uspješno ste se registrovali. Sada se možete logovati sa registrovanim podacima.");   
+  })
+  .catch(function (error) {
+    console.error("Register error", error);
+    alert("Došlo je do greške prilikom registrovanja.");         
+  });
+  }
 
 
 function displayForms(props, context) {
@@ -63,7 +91,7 @@ function displayForms(props, context) {
                   </FormGroup>                           
                   <FormGroup>
                     <Button type="submit">Dodaj lekciju</Button>
-                    {'  '}
+                   
                     <Button type="reset">Resetuj: </Button>
                   </FormGroup>
                 </Form>

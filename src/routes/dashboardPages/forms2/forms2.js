@@ -17,9 +17,48 @@ import {
 import FormControlFeedback from 'react-bootstrap/lib/FormControlFeedback';
 import FormControlStatic from 'react-bootstrap/lib/FormControlStatic';
 import InputGroupAddon from 'react-bootstrap/lib/InputGroupAddon';
+import axios from 'axios';
+
 
 const title = 'Forms';
 
+
+function submitHandler(e) {
+  e.preventDefault();
+  //history.push('/');
+
+  var username = document.getElementById("iUsername").value;
+  var email = document.getElementById("iEmail").value;
+  var pass = document.getElementById("iPassword").value;
+  var passConfirm = document.getElementById("iPasswordConfirm").value;
+
+  if (pass != passConfirm) {
+    alert("Šifra za potvrdu mora biti jednaka orginalnoj šifri.");
+  } else {
+    axios.post('http://localhost:8080/predavaci', {
+    korisnickoIme: username,
+    sifra: pass,
+    email: email,
+    adresaBoravista: document.getElementById("iAdresaBoravista").value,
+    datumRodjenja: document.getElementById("iDatumRodjenja").value,
+    ime: document.getElementById("iIme").value,
+    jmbg: document.getElementById("iJmbg").value,
+    mjestoRodjenja: document.getElementById("iMjestoRodjenja").value,
+    prezime: document.getElementById("iPrezime").value,
+    kurs: document.getElementById("ikurs").value,
+    idkurs: document.getElementById("iidkurs").value
+
+  })
+  .then(function (response) {
+    console.log("Register response", response.data.isSuccess);
+    alert("Uspješno ste se registrovali. Sada se možete logovati sa registrovanim podacima.");   
+  })
+  .catch(function (error) {
+    console.error("Register error", error);
+    alert("Došlo je do greške prilikom registrovanja.");         
+  });
+  }
+}
 
 function displayForms(props, context) {
   context.setTitle(title);
@@ -36,86 +75,139 @@ function displayForms(props, context) {
           <Panel header={<span>Unesite novog ucitelja</span>} >
             <div className="row">
               <div className="col-lg-6">
-                <Form>
-                  <FormGroup
-                    controlId="formBasicText"
-                  >
-                    <ControlLabel>Ime</ControlLabel>
-                    <FormControl
-                      type="text"
-                    />
-                    <FormControlFeedback />
-                    <ControlLabel>Prezime</ControlLabel>
-                    <FormControl
-                      type="text"
-                    />
-                    <FormControlFeedback />
-                    <ControlLabel>Telefon</ControlLabel>
-                    <FormControl
-                      type="text"
-                    />
-                    <FormControlFeedback />
+                <Form role="form" onSubmit={(e) => { submitHandler(e); }}>
+                 <fieldset>
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Username"
+                name="name"
+                id="iUsername"
+              />
+            </div>
+
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="E-mail"
+                name="email"
+                id="iEmail"
+              />
+            </div>
 
 
-                    <ControlLabel>E-mail</ControlLabel>
-                    <FormControl
-                      type="text"
-                    />
+            <div className="form-group">
+              <FormControl
+                className="form-control"
+                placeholder="Password"
+                type="password"
+                name="password"
+                id="iPassword"
+              />
+            </div>
 
-                      <FormGroup>
-                
-                    <FormControlStatic>
-                      email@example.com
-                    </FormControlStatic>
-                  </FormGroup>
-                    <FormControlFeedback />
+            <div className="form-group">
+              <FormControl
+                className="form-control"
+                placeholder="Confirm Password"
+                type="password"
+                name="password"
+                id="iPasswordConfirm"
+              />
+            </div>
 
-                    
-                  </FormGroup>
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Adresa boravista"
+                name="adresaBoravista"
+                id="iAdresaBoravista"
+              />
+            </div>
 
-                  <FormGroup controlId="formBasicText2">
-                    <ControlLabel>Šifra</ControlLabel>
-                    <FormControl
-                      type="text"
-                      placeholder="Enter Text"
-                    />
-                    <HelpBlock>Šifra mora biti jedna rijec koja sadrzi slova.</HelpBlock>
-                     
-                    <FormControlFeedback />
-                  </FormGroup>
+            <div className="form-group">
+              <FormControl
+                type="date"
+                className="form-control"
+                placeholder="Datum rođenja"
+                name="datumRodjenja"
+                id="iDatumRodjenja"
+              />
+            </div>
 
-                
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Ime"
+                name="ime"
+                id="iIme"
+              />
+            </div>
 
-                  <FormGroup
-                    controlId="formBasicFile"
-                  >
-                    <ControlLabel>Slika: </ControlLabel>
-                    <FormControl
-                      type="file"
-                    />
-                    <FormControlFeedback />
-                  </FormGroup>
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="JMBG"
+                name="jmbg"
+                id="iJmbg"
+              />
+            </div>
 
-                  
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Mjesto rođenja"
+                name="mjestoRodjenja"
+                id="iMjestoRodjenja"
+              />
+            </div>
 
-               
-                  <FormGroup controlId="formControlsSelect">
-                    <ControlLabel>Jezik koji predaje</ControlLabel>
-                    <FormControl componentClass="select" placeholder="select">
-                      <option value="1">Njemacki jezik A1</option>
-                      <option value="2">Njemacki jezik A2</option>
-                      <option value="3">Njemacki jezik A3</option>
-                      <option value="4">Njemacki jezik A4</option>
-                      <option value="5">5</option>
-                    </FormControl>
-                  </FormGroup>
+            <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Prezime"
+                name="prezime"
+                id="iPrezime"
+              />
+            </div>
 
-                  
-                  <FormGroup>
-                    <Button type="submit">Dodaj učitelja!</Button>
-                    {'  '}
-                    <Button type="reset">Resetuj: </Button>
-                  </FormGroup>
+             <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="kurs"
+                name="kurs"
+                id="ikurs"
+              />
+                </div>
+              <div className="form-group">
+              <FormControl
+                type="text"
+                className="form-control"
+                placeholder="Stepen kursa"
+                name="idkurs"
+                id="iidkurs"
+              />
+
+
+
+
+            </div>
+
+<Button type="submit" bsSize="large" bsStyle="success" block>Registruj profesora</Button>
+
+
+        
+          </fieldset>
+
+
                 </Form>
               </div>  
               </div>           

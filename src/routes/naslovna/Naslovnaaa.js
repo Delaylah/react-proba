@@ -10,6 +10,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Naslovna.css';
 import history from '../../core/history';
 
+
+
 const title = 'Naslovna';
 
 
@@ -18,20 +20,32 @@ function submitHandler(e) {
   history.push('/');
 }
 
+
+
+
 function Naslovna(props, context) {
   context.setTitle(title);
   return (
+
 <div>
- <div className="col-md-3 col-md-offset-3">
+  <h1>Image</h1>
+  <img src={require('./slika.jpg')} />
+</div>
+
+
+
+
+    <div className="col-md-4 col-md-offset-4">
+    
       <Panel header={<h3>Dobrodošli u školu stranih jezika! bla bla bla.. ovdje cemo malo srediti jos.. nekoliko ruta..  kontaktrija (nije u srsu -- :)</h3>} className="login-panel">
+
         <Button type="submit" bsSize="large" bsStyle="success" onClick = {(event) => { history.push('/login');}} block>Login</Button>
         <Button type="submit" bsSize="large" bsStyle="success" onClick = {(event) => { history.push('/register');}} block>Register</Button>
 
       </Panel>
 
     </div>
-</div>
-    
+
   );
 }
 

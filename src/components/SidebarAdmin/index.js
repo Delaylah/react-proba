@@ -41,8 +41,23 @@ class SidebarAdmin extends Component {
             </li>
            
             <li>
-              <a href="" onClick={(e) => { e.preventDefault(); history.push('/svikorisnici'); }} >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Svi korisnici
+              <a href="" onClick={(e) => { e.preventDefault(); history.push('/svikorisnicistudenti'); }} >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Svi studenti
+              </a>
+            </li>
+              <li>
+              <a href="" onClick={(e) => { e.preventDefault(); history.push('/svikorisnicipredavaci'); }} >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Svi profesori
+              </a>
+            </li>
+             <li>
+              <a href="" onClick={(e) => { e.preventDefault(); history.push('/svikorisniciadmini'); }} >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Svi administratori
+              </a>
+            </li>
+               <li>
+              <a href="" onClick={(e) => { e.preventDefault(); history.push('/dodajadmina'); }} >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;DodajAdmina
               </a>
             </li>
 

@@ -20,8 +20,13 @@ import button from './dashboardPages/buttons';
 import flotcharts from './dashboardPages/flotCharts';
 import forms from './dashboardPages/forms';
 import forms2 from './dashboardPages/forms2';
+import dodajadmina from './dashboardPages/dodajAdmina';
 
-import svikorisnici from './dashboardPages/svikorisnici';
+import svikorisnicipredavaci from './dashboardPages/svikorisnicipredavaci';
+import svikorisnicistudenti from './dashboardPages/svikorisnicistudenti';
+import svikorisniciadmini from './dashboardPages/svikorisniciadmini';
+
+
 import dashboarducitelj from './dashboardPages/dashboardUcitelj';
 
 import kursstranica from './dashboardPages/kursStranica';
@@ -107,8 +112,11 @@ export default [
     children: [
       home,
       notification,
+      dodajadmina,
       kursstranica,
-      svikorisnici,
+      svikorisnicipredavaci,
+      svikorisnicistudenti,
+      svikorisniciadmini,
       // contact,
       table,
       mojikursevi,

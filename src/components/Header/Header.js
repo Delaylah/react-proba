@@ -15,21 +15,26 @@ import SidebarAdmin from '../SidebarAdmin';
 import SidebarUcenik from '../SidebarUcenik';
 import SidebarUcitelj from '../SidebarUcitelj';
 import LoggedUser from '../../globals';
+import axios from 'axios';
+
 
 const logo = require('./logo.png');
 
+
+
 function Header() {
-  const userType = LoggedUser.GetUserType(); // Moguce vrijednosti su UCENIK, UCITELJ, ADMIN
+  const userType = 'administratori'; // LoggedUser.GetUserType() radi fenomealno ali samo za u radimo ovdje axios get user type da se poredi u cosnole logu
   console.log("Header user type", userType);
-  let sb = '';
-    if (userType == 'ADMIN') {
+  let sb = 'predavaci';
+    if (userType == 'administratori') {
       sb = <SidebarAdmin />;
     } 
-    else if (userType == 'UCENIK') {
-      sb = <SidebarUcenik />;
-    }
-    else if (userType == 'UCITELJ') {
+   
+    else if (userType == 'predavaci') {
       sb = <SidebarUcitelj />;
+    }
+     else  {
+      sb = <SidebarUcenik />;
     }
 
   return (

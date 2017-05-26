@@ -11,6 +11,24 @@ const title = 'Table';
 //context.setTitle(title);
 
 
+function submitHandler(sifra){
+
+  //history.push('/');
+  
+    axios.post('http://localhost:8080//obrisiPredavaca/{id}', {
+ id : sifra
+  })
+
+  .then(function (response) {
+    console.log("Register response", response.data.isSuccess);
+    alert("Uspješno ste se obrisalikorisnika");   
+  })
+  .catch(function (error) {
+    console.error("Register error", error);
+    alert("Došlo je do greške prilikom brisanja.");         
+  });
+  }
+
 //function displayTable(props, context) {
 var displayTable =  React.createClass({
 
@@ -24,13 +42,20 @@ var displayTable =  React.createClass({
     componentDidMount: function() {
       var _this = this;
       axios
-        .get("http://localhost:8080/studenti")
+        .get("http://localhost:8080/predavaci")
         .then(function(result) {    
           _this.setState({
             users: result.data
+          
+
           });
         });
     },
+
+
+
+
+
 
 
   
@@ -39,17 +64,18 @@ var displayTable =  React.createClass({
       
       <div>
       <div className="col-lg-12">
-        <PageHeader>Najnovije obavjesti</PageHeader>
+        <PageHeader>Edituj listu korisnika -tip -Preadavci</PageHeader>
       </div>    
         <div className="col-lg-6">
-          <Panel header={<span>NOVOSTI! </span>} >
+          <Panel header={<span>Predavaci</span>} >
             <div className="table-responsive">
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>                 
-                    <th>Naziv</th>
-                    <th>Kurs </th>                 
-                    <th>Itekst</th>
+                    <th>Ime</th>
+                    <th>Prezime </th>                 
+                    <th>Izbrisi korisnika</th>
+
                   </tr>
                 </thead>
                 <tbody>                 
@@ -59,8 +85,8 @@ var displayTable =  React.createClass({
                     <tr key="{user.id}">                
                     <td>{user.ime}</td>
                     <td>{user.prezime}</td>                              
-                    <td>Kursce se odrzati2222nekog u nekoliko sati</td>
-                  </tr>
+                 <td><button type="button" onClick ={(event)=>{submitHandler("{user.id}");}}>Izbrisi</button></td>
+                       </tr>
                   );
                 })}
                  
@@ -68,11 +94,9 @@ var displayTable =  React.createClass({
                 </tbody>
               </table>
             </div>
-          </Panel>
-              
+          </Panel>             
       </div>
 
- 
 
 
          

@@ -24,32 +24,13 @@ class SidebarUcitelj extends Component {
 
             <li>
               <a href="" onClick={(e) => { e.preventDefault(); history.push('/notification'); }} >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Dashboard
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Novosti
               </a>
             </li>
 
-            <li className={classNames({ active: !this.state.chartsElementsCollapsed })}>
-              <a
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.setState({ chartsElementsCollapsed: !this.state.chartsElementsCollapsed });
-                  return false;
-                }}
-              >
-                <i className="fa fa-bar-chart-o fa-fw" /> &nbsp;Kursevi
-                <span className="fa arrow" />
-              </a>
-              <ul
-                className={
-                  classNames({
-                    'nav nav-second-level': true,
-                    collapse: this.state.chartsElementsCollapsed,
-                  })
-              }
-              >
+            
                 <li>
-                  <a href="" onClick={(e) => { e.preventDefault(); history.push('/dashboarducitelja'); }} >
+                  <a href="" onClick={(e) => { e.preventDefault(); history.push('/dashboarducitelj'); }} >
                    Moje lekcije, termini i testovi 
                   </a>
                 </li>
@@ -57,7 +38,7 @@ class SidebarUcitelj extends Component {
                   <a
                     href=""
                     onClick={(e) => { e.preventDefault(); history.push('/dodavanjeterminaforma'); }}
-                  > Dodaj termin
+                  > Dodaj termin predavanja kursa
                     
                   </a>
                 </li>
@@ -65,7 +46,7 @@ class SidebarUcitelj extends Component {
                   <a
                     href=""
                     onClick={(e) => { e.preventDefault(); history.push('/dodavanjetestaforma'); }}
-                  > Dodaj test
+                  > Dodaj test za kurs
                     
                   </a>
                 </li>
@@ -73,12 +54,12 @@ class SidebarUcitelj extends Component {
                   <a
                     href=""
                     onClick={(e) => { e.preventDefault(); history.push('/dodavanjelekcijeforma'); }}
-                  > Dodaj novu lekciju
+                  > Dodaj novu lekciju za kurs
                     
                   </a>
                 </li>
-              </ul>
-            </li>
+              
+    
 
 
 
